@@ -6,10 +6,6 @@ import Configuracao from "./pages/Configuracao";
 import Organista from "./pages/Organista";
 
 
-function PageOrganista() {
-  return <div className="p-6">🎹 Página de Organistas</div>;
-}
-
 function  PageRodizio() {
   return <div className="p-6">📅 Página do Rodízio</div>;
 }
@@ -22,7 +18,7 @@ type Nivel =
 | "Culto oficial"
 | "Oficializada";
 
-interface Organista {
+interface IOrganista {
   id: string;
   nome: string;
   nivel: Nivel;
@@ -78,9 +74,9 @@ function podeRDJ(n: Nivel) {
 
 // Função round-robin
 function escolherProximo(
-  candidatos: Organista[],
+  candidatos: IOrganista[],
   contador: Record<string, number>
-): Organista | null {
+): IOrganista | null {
   if (candidatos.length === 0) return null;
   // Ordenar por menor ocorrência
   const ordenados = [...candidatos].sort(
@@ -100,7 +96,7 @@ export default function App() {
     mesFinal: "2025-10",
   });
 
-  const [organistas, setOrganistas] = useState<Organista[]>([
+  const [organistas, setOrganistas] = useState<IOrganista[]>([
     { id: "1", nome: "Ana", nivel: "Ensaio", corHex: stringToColor("Ana") },
     { id: "2", nome: "Bruna", nivel: "RDJ", corHex: stringToColor("Bruna") },
     { id: "3", nome: "Carla", nivel: "Culto oficial", corHex: stringToColor("Carla") },
@@ -144,8 +140,8 @@ export default function App() {
       if (cultoOrg) contador[cultoOrg.id] = (contador[cultoOrg.id] || 0) + 1;
 
       // RDJ (se houver)
-      let meiaHoraRDJ: Organista | null = null;
-      let rdjOrg: Organista | null = null;
+      let meiaHoraRDJ: IOrganista | null = null;
+      let rdjOrg: IOrganista | null = null;
       if (config.temRDJ) {
         const meiaHoraRdjCands = organistas.filter((o) => podeMeiaHora(o.nivel));
         meiaHoraRDJ = escolherProximo(meiaHoraRdjCands, contador);
