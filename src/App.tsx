@@ -1,7 +1,19 @@
-import './App.css'
-
 import React, { useState } from "react";
 import { format, eachDayOfInterval, startOfMonth, endOfMonth, addMonths } from "date-fns";
+import { Header } from './components/Header';
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+
+function  PageConfiguracao() {
+  return <div className="p-6">⚙️ Página de Configuração</div>;
+}
+
+function PageOrganista() {
+  return <div className="p-6">🎹 Página de Organistas</div>;
+}
+
+function  PageRodizio() {
+  return <div className="p-6">📅 Página do Rodízio</div>;
+}
 
 type Nivel =
 | "Ensaio"
@@ -157,56 +169,39 @@ export default function App() {
   }
 
   return (
-    <div className="p-4 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">
-        Rodízio de Organistas – {config.nomeComum || "___"}
-      </h1>
-
-      <button
-        className="px-4 py-2 bg-blue-600 text-white rounded mb-4"
-        onClick={gerarRodizio}
-      >
-        Gerar Rodízio
-      </button>
-
-      {rodizio.length > 0 && (
-        <table className="w-full border text-sm">
-          <thead>
-            <tr className="bg-gray-200">
-              <th>Data</th>
-              <th>Dia</th>
-              <th>Meia Hora</th>
-              <th>Culto</th>
-              {config.temRDJ && <th>Meia Hora RDJ</th>}
-              {config.temRDJ && <th>RDJ</th>}
-            </tr>
-          </thead>
-          <tbody>
-            {rodizio.map((r, i) => (
-              <tr key={i} className="border-b">
-                <td>{r.data}</td>
-                <td>{r.weekday}</td>
-                <td style={{ color: stringToColor(r.meiaHoraCulto || "") }}>
-                  {r.meiaHoraCulto}
-                </td>
-                <td style={{ color: stringToColor(r.culto || "") }}>
-                  {r.culto}
-                </td>
-                {config.temRDJ && (
-                  <>
-                    <td style={{ color: stringToColor(r.meiaHoraRDJ || "") }}>
-                      {r.meiaHoraRDJ}
-                    </td>
-                    <td style={{ color: stringToColor(r.rdj || "") }}>
-                      {r.rdj}
-                    </td>
-                  </>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </div>
+    <Router>
+      <div className="min-h-screen bg-neutral-50 flex flex-col">
+        <Header />
+        <nav className="w-full bg-white shadow-md flex justify-center gap-4 p-3">
+          <Link
+            to="/configuracao"
+            className="px-4 py-2 bg-blue-600 text-white rounded-sm hover:bg-blue-700 transition"
+          >
+            Configuração
+          </Link>
+          <Link
+            to="/organista"
+            className="px-4 py-2 bg-green-600 text-white rounded-sm hover:bg-green-700 transition"
+          >
+            Organistas
+          </Link>
+          <Link
+            to="/rodizio"
+            className="px-4 py-2 bg-purple-600 text-white rounded-sm hover:bg-purple-700 transition"
+          >
+            Rodízio
+          </Link>
+        </nav>
+        <main className="flex-1 p-6 max-w-5xl mx-auto w-full">
+          <Routes>
+            <Route path="/" element={<PageRodizio />} />
+            <Route path="/configuracao" element={<PageConfiguracao />} />
+            <Route path="/organista" element={<PageOrganista />} />
+            <Route path="/rodizio" element={<PageRodizio />} />
+          </Routes>
+        </main>
+      </div>
+    </Router>
+    
   );
 }
