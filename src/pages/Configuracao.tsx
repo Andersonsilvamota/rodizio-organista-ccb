@@ -128,10 +128,28 @@ export default function Configuracao() {
         {/* Botão */}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold shadow-md hover:bg-blue-700 transition "
-        >
-          💾 Salvar Configuração
-        </button>
+          disabled={
+            !form.nomeComum ||
+            form.diasCulto.length === 0 ||
+            !form.dataInicio ||
+            !form.dataFim ||
+            !form.dataInicio ||
+            !form.dataFim
+          }
+          className={`w-full bg-blue-600 text-white px-6 py-3 rounded-xl shadow-md hover:bg-blue-700 transition  
+            ${
+              !form.nomeComum ||
+              form.diasCulto.length === 0 ||
+              !form.dataInicio ||
+              !form.dataFim ||
+              !form.dataInicio ||
+              !form.dataFim
+                ? "opacity-50 cursor-not-allowed hover:bg-blue-600"
+                : "cursor-pointer"
+    }`}
+>
+  Salvar Configuração
+</button>
       </form>
     </div>
     </div>

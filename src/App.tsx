@@ -3,6 +3,7 @@ import { format, eachDayOfInterval, startOfMonth, endOfMonth, addMonths } from "
 import { Header } from './components/Header';
 import { BrowserRouter as Router, Routes, Route, Link, NavLink } from "react-router-dom";
 import Configuracao from "./pages/Configuracao";
+import Organista from "./pages/Organista";
 
 
 function PageOrganista() {
@@ -177,7 +178,7 @@ export default function App() {
             to="/configuracao"
             className={({ isActive }) =>
               `${baseClass} ${
-                isActive ? "bg-blue-600" : "bg-blue-100 text-blue-800 hover:bg-blue-200"
+                isActive ? "bg-gray-800 text-gray-50": "bg-gray-500 text-gray-50 hover:bg-gray-700"
               }`
             }
           >
@@ -209,7 +210,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<PageRodizio />} />
             <Route path="/configuracao" element={<Configuracao />} />
-            <Route path="/organista" element={<PageOrganista />} />
+            <Route path="/organista" element={<Organista />} />
             <Route path="/rodizio" element={<PageRodizio />} />
           </Routes>
         </main>
