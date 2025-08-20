@@ -4,6 +4,7 @@ import { Header } from './components/Header';
 import { BrowserRouter as Router, Routes, Route, Link, NavLink } from "react-router-dom";
 import Configuracao from "./pages/Configuracao";
 import Organista from "./pages/Organista";
+import Rodizio from "./pages/Rodizio";
 
 
 function  PageRodizio() {
@@ -204,10 +205,10 @@ export default function App() {
         </nav>
         <main className="">
           <Routes>
-            <Route path="/" element={<PageRodizio />} />
+            <Route path="/" element={<Configuracao />} />
             <Route path="/configuracao" element={<Configuracao />} />
             <Route path="/organista" element={<Organista />} />
-            <Route path="/rodizio" element={<PageRodizio />} />
+            <Route path="/rodizio" element={<Rodizio />} />
           </Routes>
         </main>
       </div>
