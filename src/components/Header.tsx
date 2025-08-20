@@ -1,7 +1,7 @@
 export function Header() {
   return (
-    <header className="w-full bg-neutral-50 text-sky-900 p-4 shadow-md pl-32 pr-32">
-      <div className="container mx-auto px-4 pt-2">
+    <header className="w-full bg-neutral-50 text-sky-900 p-4 shadow-md pl-44 pr-44">
+      <div className="container mx-auto px-4 pt-2 ">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="font-serif text-3xl font-bold text-primary">Sistema de Rodízio CCB</h1>

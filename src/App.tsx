@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { format, eachDayOfInterval, startOfMonth, endOfMonth, addMonths } from "date-fns";
 import { Header } from './components/Header';
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, NavLink } from "react-router-dom";
+import Configuracao from "./pages/Configuracao";
 
-function  PageConfiguracao() {
-  return <div className="p-6">⚙️ Página de Configuração</div>;
-}
 
 function PageOrganista() {
   return <div className="p-6">🎹 Página de Organistas</div>;
@@ -91,6 +89,8 @@ function escolherProximo(
 }
 
 export default function App() {
+  const activeClass = "px-4 py-2 rounded-lg font-medium text-white shadow-md";
+  const baseClass = "px-4 py-2 rounded-lg font-medium transition";
   const [config, setConfig] = useState<Configuracao>({
     nomeComum: "",
     diasCulto: [0, 3, 5], // Exemplo: Dom, Qua, Sex
@@ -173,29 +173,42 @@ export default function App() {
       <div className="min-h-screen bg-neutral-50 flex flex-col">
         <Header />
         <nav className="w-full bg-white shadow-md flex justify-center gap-4 p-3">
-          <Link
+          <NavLink
             to="/configuracao"
-            className="px-4 py-2 bg-blue-600 text-white rounded-sm hover:bg-blue-700 transition"
+            className={({ isActive }) =>
+              `${baseClass} ${
+                isActive ? "bg-blue-600" : "bg-blue-100 text-blue-800 hover:bg-blue-200"
+              }`
+            }
           >
             Configuração
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/organista"
-            className="px-4 py-2 bg-green-600 text-white rounded-sm hover:bg-green-700 transition"
+            className={({ isActive }) =>
+              `${baseClass} ${
+                isActive ? "bg-green-600" : "bg-green-100 text-green-800 hover:bg-green-200"
+              }`
+            }
           >
-            Organistas
-          </Link>
-          <Link
+            🎹 Organista
+          </NavLink>
+
+          <NavLink
             to="/rodizio"
-            className="px-4 py-2 bg-purple-600 text-white rounded-sm hover:bg-purple-700 transition"
+            className={({ isActive }) =>
+              `${baseClass} ${
+                isActive ? "bg-purple-600" : "bg-purple-100 text-purple-800 hover:bg-purple-200"
+              }`
+            }
           >
-            Rodízio
-          </Link>
+            📅 Rodízio
+          </NavLink>
         </nav>
-        <main className="flex-1 p-6 max-w-5xl mx-auto w-full">
+        <main className="">
           <Routes>
             <Route path="/" element={<PageRodizio />} />
-            <Route path="/configuracao" element={<PageConfiguracao />} />
+            <Route path="/configuracao" element={<Configuracao />} />
             <Route path="/organista" element={<PageOrganista />} />
             <Route path="/rodizio" element={<PageRodizio />} />
           </Routes>
