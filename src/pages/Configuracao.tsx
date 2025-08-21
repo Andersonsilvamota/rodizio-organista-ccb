@@ -1,6 +1,12 @@
 import { useState } from "react";
+import { useConfig } from "../context/configContext";
+
 
 export default function Configuracao() {
+  const { setConfiguracao } = useConfig();
+  const [dataInicio, setDataInicio] = useState("");
+  const [dataFim, setDataFim] = useState("");
+  const [diasCulto, setDiasCulto] = useState<number[]>([]);
   const [form, setForm] = useState({
     nomeComum: "",
     diasCulto: [] as string[],
@@ -9,6 +15,7 @@ export default function Configuracao() {
     dataFim: ""
   });
 
+  console.log("clique", form)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({
@@ -27,6 +34,7 @@ export default function Configuracao() {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
+    console.log("teste limpar->>>", e)
     e.preventDefault();
     alert("✅ Configuração salva:\n\n" + JSON.stringify(form, null, 2));
   };
@@ -38,6 +46,33 @@ export default function Configuracao() {
       .toISOString()
       .split("T")[0]
   : today;
+
+  const handleSalvar = () => {
+  const diasNumericos = form.diasCulto.map((dia) =>
+    ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"].indexOf(dia)
+  );
+
+  setConfiguracao({
+    dataInicio: new Date(form.dataInicio),
+    dataFim: new Date(form.dataFim),
+    diasCulto: diasNumericos,
+  });
+
+  alert("Configuração salva!");
+};
+
+
+  const handleLimpar = (e: React.FormEvent) => {
+    console.log("limpar")
+    setForm({
+      nomeComum: "",
+      diasCulto: [] as string[],
+      reuniaoJovens: false,
+      dataInicio: "",
+      dataFim: ""
+    })
+  }
+
   console.log("minDataFinal",minDataFinal)
   return (
     <div className="w-full bg-neutral-5 p-4 pl-44 pr-44">
@@ -126,32 +161,69 @@ export default function Configuracao() {
         
 
         {/* Botão */}
-        <button
-          type="submit"
-          disabled={
-            !form.nomeComum ||
-            form.diasCulto.length === 0 ||
-            !form.dataInicio ||
-            !form.dataFim ||
-            !form.dataInicio ||
-            !form.dataFim
-          }
-          className={`w-full bg-blue-600 text-white px-6 py-3 rounded-xl shadow-md hover:bg-blue-700 transition  
-            ${
+        <div className="grid grid-cols-3 gap-4">
+          <button
+            type="submit"
+            onClick={handleSalvar}
+            disabled={
               !form.nomeComum ||
               form.diasCulto.length === 0 ||
               !form.dataInicio ||
               !form.dataFim ||
               !form.dataInicio ||
               !form.dataFim
-                ? "opacity-50 cursor-not-allowed hover:bg-blue-600"
-                : "cursor-pointer"
-    }`}
->
-  Salvar Configuração
-</button>
+            }
+            className={`w-full col-span-2 bg-blue-600 text-white px-6 py-3 rounded-xl shadow-md hover:bg-blue-700 transition  
+              ${
+                !form.nomeComum ||
+                form.diasCulto.length === 0 ||
+                !form.dataInicio ||
+                !form.dataFim ||
+                !form.dataInicio ||
+                !form.dataFim
+                  ? "opacity-50 cursor-not-allowed"
+                  : "cursor-pointer"
+              }
+            `}
+          >
+            Salvar Configuração
+          </button>
+          {/* <button
+            type="reset"
+            onClick={handleLimpar}
+            disabled={
+              !!form.nomeComum ||
+              form.diasCulto.length >= 1 ||
+              !!form.dataInicio ||
+              !!form.dataFim ||
+              !!form.dataInicio ||
+              !!form.dataFim
+            }
+            className={`w-full bg-red-600 text-white px-6 py-3 rounded-xl shadow-md hover:bg-red-700 transition
+              ${
+                !!form.nomeComum ||
+                form.diasCulto.length >= 1 ||
+                !!form.dataInicio ||
+                !!form.dataFim ||
+                !!form.dataInicio ||
+                !!form.dataFim
+                  ? "cursor-pointer"
+                  : "opacity-50 cursor-not-allowed"
+              }
+              `}
+            
+          >
+            Limpar
+          </button> */}
+          <button
+          className="w-full bg-red-600 text-white px-6 py-3 rounded-xl shadow-md hover:bg-red-700"
+          type="reset"
+            onClick={handleLimpar}
+          >Limpar</button>
+          </div> 
+          
       </form>
     </div>
-    </div>
+  </div>
   );
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import {useConfig} from "../context/configContext";
 
 interface Organista {
   id: number;
@@ -8,27 +9,29 @@ interface Organista {
 }
 
 export default function Organista() {
-  const [organistas, setOrganistas] = useState<Organista[]>([]);
+  //const [organistas, setOrganistas] = useState<Organista[]>([]);
   const [novoOrganista, setNovoOrganista] = useState({ nome: "", nivel: "" });
-
+  const {organistas, setOrganistas} = useConfig()
   // 🎨 Paleta de cores para cada organista
   const cores = [
     "#e57373", "#64b5f6", "#81c784", "#ffb74d", "#ba68c8",
     "#4db6ac", "#7986cb", "#f06292", "#9575cd", "#4fc3f7"
   ];
 
-  // 🔹 Carregar do localStorage ao iniciar
-  useEffect(() => {
-    const dadosSalvos = localStorage.getItem("organistas");
-    if (dadosSalvos) {
-      setOrganistas(JSON.parse(dadosSalvos));
-    }
-  }, []);
 
-  // 🔹 Salvar no localStorage sempre que alterar
-  useEffect(() => {
-    localStorage.setItem("organistas", JSON.stringify(organistas));
-  }, [organistas]);
+
+  // // 🔹 Carregar do localStorage ao iniciar
+  // useEffect(() => {
+  //   const dadosSalvos = localStorage.getItem("organistas");
+  //   if (dadosSalvos) {
+  //     setOrganistas(JSON.parse(dadosSalvos));
+  //   }
+  // }, []);
+
+  // // 🔹 Salvar no localStorage sempre que alterar
+  // useEffect(() => {
+  //   localStorage.setItem("organistas", JSON.stringify(organistas));
+  // }, [organistas]);
 
   const adicionarOrganista = () => {
     if (!novoOrganista.nome || !novoOrganista.nivel) return;
@@ -67,28 +70,28 @@ export default function Organista() {
   };
 
   // 🔹 Gerar rodízio respeitando níveis
-  const gerarRodizio = () => {
-    let index = 0;
-    return cultos.map((culto) => {
-      const validos = organistasValidos(culto.tipo);
-      if (validos.length === 0) {
-        return { ...culto, meiaHora: null, cultoOficial: null };
-      }
+  // const gerarRodizio = () => {
+  //   let index = 0;
+  //   return cultos.map((culto) => {
+  //     const validos = organistasValidos(culto.tipo);
+  //     if (validos.length === 0) {
+  //       return { ...culto, meiaHora: null, cultoOficial: null };
+  //     }
 
-      const meiaHora = validos[index % validos.length];
-      index++;
-      const cultoOficial = validos[index % validos.length];
-      index++;
+  //     const meiaHora = validos[index % validos.length];
+  //     index++;
+  //     const cultoOficial = validos[index % validos.length];
+  //     index++;
 
-      return {
-        ...culto,
-        meiaHora,
-        cultoOficial,
-      };
-    });
-  };
+  //     return {
+  //       ...culto,
+  //       meiaHora,
+  //       cultoOficial,
+  //     };
+  //   });
+  // };
 
-  const rodizioPreview = gerarRodizio();
+  //const rodizioPreview = gerarRodizio();
 
   return (
     <div className="p-6 space-y-6">
@@ -156,7 +159,7 @@ export default function Organista() {
       </div>
 
       {/* Preview do rodízio */}
-      <div className="mt-10">
+      {/* <div className="mt-10">
         <h3 className="text-lg font-semibold mb-4">Prévia do Rodízio</h3>
         {rodizioPreview.length === 0 ? (
           <p className="text-gray-500">Cadastre organistas para visualizar o rodízio.</p>
@@ -198,7 +201,7 @@ export default function Organista() {
             </tbody>
           </table>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }

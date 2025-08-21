@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { gerarRodizio,  } from "../utils/rodizioGenerator";
 import { format } from "date-fns";
+import { useConfig } from "../context/configContext";
+import Organista from "./Organista";
 
 export type Nivel =
   | "Ensaio"
@@ -16,6 +18,14 @@ export interface Organista {
   nivel: Nivel;
   cor: string;
 }
+export interface Escala {
+  data: Date;
+  rdjMeiaHora: Organista | null;
+  rdjCulto: Organista | null;
+  cultoMeiaHora: Organista | null;
+  culto: Organista | null;
+}
+
 
 export interface Configuracao {
   dataInicio: Date;
@@ -24,11 +34,23 @@ export interface Configuracao {
 }
 
 export default function Rodizio() {
-  const [organistas, setOrganistas] = useState<Organista[]>([
-    { id: "1", nome: "Maria", nivel: "RDJ/Culto Oficial", cor: "text-red-600" },
-    { id: "2", nome: "Ana", nivel: "Culto Oficial", cor: "text-blue-600" },
-    { id: "3", nome: "João", nivel: "Ensaio", cor: "text-green-600" },
-  ]);
+  const { configuracao, organistas } = useConfig();
+  
+  console.log("configuração", configuracao)
+
+  if (!configuracao) {
+    return <div className="flex flex-col items-center p-6 text-red-600">
+      <div>⚠ Configure primeiro os dias de culto na aba "Configuração".</div>
+    </div>;
+  }
+
+  const escalas = gerarRodizio(configuracao, organistas);
+  // const [organistas, setOrganistas] = useState<Organista[]>([
+    
+  //   { id: "1", nome: "Maria", nivel: "RDJ/Culto Oficial", cor: "text-red-600" },
+  //   { id: "2", nome: "Ana", nivel: "Culto Oficial", cor: "text-blue-600" },
+  //   { id: "3", nome: "João", nivel: "Ensaio", cor: "text-green-600" },
+  // ]);
 
   const [config] = useState<Configuracao>({
     dataInicio: new Date(),
@@ -36,7 +58,7 @@ export default function Rodizio() {
     diasCulto: [0, 3, 5], // domingo, quarta e sexta
   });
 
-  const escalas = gerarRodizio(config, organistas);
+  
 
   return (
     <div className="p-6">
@@ -45,37 +67,46 @@ export default function Rodizio() {
       <table className="w-full border-collapse bg-white rounded-lg shadow">
   <thead>
     <tr className="bg-gray-100">
-      <th className="border p-2">Data</th>
-      <th className="border p-2">Dia</th>
-      <th className="border p-2">Meia Hora (RDJ)</th>
-      <th className="border p-2">Culto (RDJ)</th>
-      <th className="border p-2">Meia Hora (Culto)</th>
-      <th className="border p-2">Culto (Culto)</th>
+      <th className="border border-black p-2">Data</th>
+      <th className="border border-black p-2">Dia</th>
+      <th className="border border-black p-2">Meia Hora - (RDJ)</th>
+      <th className="border border-black p-2">RDJ</th>
+      <th className="border border-black p-2">Meia Hora (Culto)</th>
+      <th className="border border-black p-2">Culto Oficial</th>
     </tr>
   </thead>
   <tbody>
     {escalas.map((escala, idx) => (
       <tr key={idx} className="text-center">
-        <td className="border p-2">{format(escala.data, "dd/MM/yyyy")}</td>
-        <td className="border p-2">
+        <td className="border border-black p-2">{format(escala.data, "dd/MM/yyyy")}</td>
+        <td className="border border-black p-2">
           {escala.data.toLocaleDateString("pt-BR", { weekday: "long" })}
         </td>
-        <td className={`border p-2 ${escala.rdjMeiaHora?.cor || ""}`}>
-          {escala.rdjMeiaHora?.nome || "-"}
+        <td className="border border-black p-2">
+          <span className={escala.rdjMeiaHora?.cor || ""}>
+            {escala.rdjMeiaHora?.nome || "-"}
+          </span>
         </td>
-        <td className={`border p-2 ${escala.rdjCulto?.cor || ""}`}>
-          {escala.rdjCulto?.nome || "-"}
+        <td className="border border-black p-2">
+          <span className={escala.rdjCulto?.cor || ""}>
+            {escala.rdjCulto?.nome || "-"}
+          </span>
         </td>
-        <td className={`border p-2 ${escala.cultoMeiaHora?.cor || ""}`}>
-          {escala.cultoMeiaHora?.nome || "-"}
+        <td className="border border-black p-2">
+          <span className={escala.cultoMeiaHora?.cor || ""}>
+            {escala.cultoMeiaHora?.nome || "-"}
+          </span>
         </td>
-        <td className={`border p-2 ${escala.culto?.cor || ""}`}>
-          {escala.culto?.nome || "-"}
+        <td className="border border-black p-2">
+          <span className={escala.culto?.cor || ""}>
+            {escala.culto?.nome || "-"}
+          </span>
         </td>
       </tr>
     ))}
   </tbody>
 </table>
+
 
 
       <div className="mt-6 p-4 bg-gray-50 rounded-lg">
