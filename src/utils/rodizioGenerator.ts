@@ -9,10 +9,14 @@ export type Nivel =
   | "Oficializada";
 
 export interface Organista {
+  diasDisponiveis: number[];
+  ocorrencias: string | number | readonly string[] | undefined;
   id: string;
   nome: string;
   nivel: Nivel;
   cor: string;
+  diasSelecionados: number[]
+  
 }
 
 export interface Configuracao {

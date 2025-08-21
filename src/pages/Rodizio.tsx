@@ -12,10 +12,12 @@ export type Nivel =
   | "Culto Oficial"
   | "Oficializada";
 
-export interface Organista {
-  id: string;
+interface Organista {
+  id: number;
   nome: string;
-  nivel: Nivel;
+  nivel: string;
+  ocorrencias: string | number | readonly string[] | undefined         // quantas vezes quer tocar no mês
+  diasDisponiveis: number[];   // dias da semana em que pode tocar
   cor: string;
 }
 export interface Escala {
@@ -43,7 +45,7 @@ export default function Rodizio() {
       <div>⚠ Configure primeiro os dias de culto na aba "Configuração".</div>
     </div>;
   }
-
+  const temRDJ = configuracao.diasCulto.includes(0); // domingo = RDJ
   const escalas = gerarRodizio(configuracao, organistas);
   // const [organistas, setOrganistas] = useState<Organista[]>([
     
@@ -64,7 +66,42 @@ export default function Rodizio() {
     <div className="p-6">
       <h2 className="text-xl font-bold mb-4">Rodízio de Organistas</h2>
 
-      <table className="w-full border-collapse bg-white rounded-lg shadow">
+      <table className="w-full border-collapse bg-white">
+      <thead>
+        <tr>
+          <th className="border p-2">Data</th>
+          <th className="border p-2">Dia</th>
+          {temRDJ && (
+            <>
+              <th className="border p-2">Meia Hora (RDJ)</th>
+              <th className="border p-2">Culto (RDJ)</th>
+            </>
+          )}
+          <th className="border p-2">Meia Hora (Culto)</th>
+          <th className="border p-2">Culto (Culto)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {escalas.map((escala, idx) => (
+          <tr key={idx}>
+            <td className="border p-2">{escala.data.toLocaleDateString("pt-BR")}</td>
+            <td className="border p-2">
+              {escala.data.toLocaleDateString("pt-BR", { weekday: "long" })}
+            </td>
+            {temRDJ && (
+              <>
+                <td className="border p-2">{escala.rdjMeiaHora?.nome || "-"}</td>
+                <td className="border p-2">{escala.rdjCulto?.nome || "-"}</td>
+              </>
+            )}
+            <td className="border p-2">{escala.cultoMeiaHora?.nome || "-"}</td>
+            <td className="border p-2">{escala.culto?.nome || "-"}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+
+      {/* <table className="w-full border-collapse bg-white rounded-lg shadow">
   <thead>
     <tr className="bg-gray-100">
       <th className="border border-black p-2">Data</th>
@@ -105,7 +142,7 @@ export default function Rodizio() {
       </tr>
     ))}
   </tbody>
-</table>
+</table> */}
 
 
 
